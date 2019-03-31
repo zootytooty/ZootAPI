@@ -1,3 +1,9 @@
+# Exclude package items
+ZootAPI.zip
+package/
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -102,3 +108,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+conf.yaml
