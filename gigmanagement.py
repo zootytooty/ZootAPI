@@ -9,7 +9,7 @@ import datetime
 
 class GigManagement():
 
-    def __init__(self, ):
+    def __init__(self):
         self.conn = self.db_conn()
         self.cursor = self.conn.cursor()
 
@@ -19,7 +19,7 @@ class GigManagement():
 
         TO-DO: Add default date filter
         
-        Params:
+        Args:
             filters (dict, optional): Defaults to {}.
                                       Items to filter by such as venue, date or artists
     
