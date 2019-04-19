@@ -4,6 +4,7 @@ Desc:
 
 import yaml
 import pymysql as mysql
+import datetime
 
 
 class GigManagement():
@@ -77,9 +78,9 @@ class GigManagement():
             'title': gig['title'],
             'venue': gig['venue'],
             'description': gig['description'],
-            'performance_date': datetime_date_to_string(gig['performance_date'], "%Y-%m-%d"),
-            'doors_open': timedelta_to_string(gig['doors_open'], "%-I:%M %p"),
-            'music_starts': timedelta_to_string(gig['music_starts'], "%-I:%M %p"),
+            'performance_date': self.datetime_date_to_string(gig['performance_date'], "%Y-%m-%d"),
+            'doors_open': self.timedelta_to_string(gig['doors_open'], "%-I:%M %p"),
+            'music_starts': self.timedelta_to_string(gig['music_starts'], "%-I:%M %p"),
             'price': float(gig['price']),
             'url': gig['url'],
             'image_url': gig['image_url']
