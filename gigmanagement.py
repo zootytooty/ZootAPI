@@ -36,22 +36,19 @@ class GigManagement():
         return [response for response in self.cursor]
 
 
-    def add_gig(self, venue, title, music_starts, doors_open, performance_date, price, description, url, image_url):
+    def add_gigs(self, values):
 
-        sql = """
-                INSERT INTO zootdb.gig_guide 
-                    (venue, title, music_starts, doors_open, performance_date, price, description, url, image_url) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """
-        vals = (venue, title, music_starts, doors_open, performance_date, price, description, url, image_url)
-        
-        self.cursor.execute(sql, vals)
+        sql = """INSERT INTO zootdb.gig_guide (venue, title, music_starts, doors_open, performance_date, price, description, url, image_url) 
+                 VALUES (%(venue)s, %(title)s, %(music_starts)s, %(doors_open)s, %(performance_date)s, %(price)s, %(description)s, %(url)s, %(image_url)s)"""
+
+        self.cursor.executemany(sql, values)
         self.conn.commit()
 
-        self.cursor.execute('SELECT LAST_INSERT_ID()')
-        gig_id = self.cursor.fetchone()
+        response = {
+            "records_added": self.cursor.rowcount,
+        }
 
-        return gig_id['LAST_INSERT_ID()']
+        return response
     
 
     def db_conn(self):
