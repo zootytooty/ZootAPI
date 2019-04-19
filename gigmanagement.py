@@ -36,6 +36,11 @@ class GigManagement():
         
         self.cursor.execute(sql, vals)
         self.conn.commit()
+
+        self.cursor.execute('SELECT LAST_INSERT_ID()')
+        gig_id = self.cursor.fetchone()
+
+        return gig_id['LAST_INSERT_ID()']
     
 
     def db_conn(self):

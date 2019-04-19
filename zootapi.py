@@ -27,9 +27,10 @@ def lambda_handler(event, context):
     elif verb == "POST" and method == "/gigmanagement/addgigs":
 
         body = event['body-json']
+        gig_ids = []
 
         for gig in body['gigs']:
-        
+
             venue = gig['venue']
             title = gig['title']
             music_starts = gig['music_starts']
@@ -40,18 +41,18 @@ def lambda_handler(event, context):
             url = gig['url']
             image_url = gig['image_url']
 
-            gm.add_gig(venue = venue,
-                        title = title,
-                        music_starts = music_starts,
-                        doors_open = doors_open,
-                        performance_date = performance_date,
-                        price = price, 
-                        description = description,
-                        url = url,
-                        image_url = image_url)
+            gig_ids.append(gm.add_gig(venue = venue,
+                                    title = title,
+                                    music_starts = music_starts,
+                                    doors_open = doors_open,
+                                    performance_date = performance_date,
+                                    price = price, 
+                                    description = description,
+                                    url = url,
+                                    image_url = image_url))
 
         return {
-            "status": "Success!"
+            "gig_ids": gig_ids
         }
 
     else:
