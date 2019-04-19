@@ -18,9 +18,9 @@ class GigManagement():
 
         TO-DO: Add default date filter
         
-        
-        filters (dict, optional): Defaults to {}.
-                                  Items to filter by such as venue, date or artists
+        Params:
+            filters (dict, optional): Defaults to {}.
+                                      Items to filter by such as venue, date or artists
     
         Returns:
             list: list of gigs
@@ -33,7 +33,7 @@ class GigManagement():
 
         # Execute
         self.cursor.execute(' '.join(sql), filters)
-        return [response for response in self.cursor]
+        return [self.gig_prepper(response) for response in self.cursor]
 
 
     def add_gigs(self, values):
@@ -69,4 +69,27 @@ class GigManagement():
                              cursorclass=mysql.cursors.DictCursor)
 
         return conn
+
+
+    def gig_prepper(self, gig):
+
+        return {
+            'title': gig['title'],
+            'venue': gig['venue'],
+            'description': gig['description'],
+            'performance_date': datetime_date_to_string(gig['performance_date'], "%Y-%m-%d"),
+            'doors_open': timedelta_to_string(gig['doors_open'], "%-I:%M %p"),
+            'music_starts': timedelta_to_string(gig['music_starts'], "%-I:%M %p"),
+            'price': float(gig['price']),
+            'url': gig['url'],
+            'image_url': gig['image_url']
+            }
+
+
+    def timedelta_to_string(self, time, format):
+        return (datetime.datetime.min + time).strftime(format)
+
+    def datetime_date_to_string(self, date, format):
+        return date.strftime(format)
+
 
