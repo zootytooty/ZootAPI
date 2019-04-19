@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     method = event['context']['resource-path']
 
     # Pass to the appropriate function
-    if verb=="GET" and method = "/gigmanagement/getgigs":
+    if verb == "GET" and method == "/gigmanagement/getgigs":
 
         if event['params']['querystring']:
             query_params = event['params']['querystring']
@@ -24,7 +24,7 @@ def lambda_handler(event, context):
 
         return gigs
 
-    elif verb=="POST" and method = "/gigmanagement/addgigs":
+    elif verb == "POST" and method == "/gigmanagement/addgigs":
 
         body = event['body-json']
 
