@@ -16,7 +16,23 @@ Insert process to add new shows. Requires the following inputs:
 - url    
 - image_url 
 
-
+A JSON payload containing a list of gigs can be posted to the `addgigs` endpoint.
+```
+{
+    "gigs": [
+    {
+        "venue": ,
+        "title": ,
+        "music_starts": ,
+        "doors_open": ,
+        "performance_date": ,
+        "price": ,
+        "description": ,
+        "url": ,
+        "image_url": 
+    }]
+}
+```
 
 
 ### Get Gigs
