@@ -36,7 +36,15 @@ def lambda_handler(event, context):
         url = event['body-json']['url']
         image_url = event['body-json']['image_url']
 
-        gm.add_gig()
+        gm.add_gig(venue = venue,
+                    title = title,
+                    music_starts = music_starts,
+                    doors_open = doors_open,
+                    performance_date = performance_date,
+                    price = price, 
+                    description = description,
+                    url = url,
+                    image_url = image_url)
 
         return {
             "status": "Success!"
