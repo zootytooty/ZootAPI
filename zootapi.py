@@ -14,14 +14,9 @@ def lambda_handler(event, context):
 
     # Pass to the appropriate function
     if verb == "GET" and method == "/gigmanagement/getgigs":
-
-        if event['params']['querystring']:
-            query_params = event['params']['querystring']
-            venue = query_params['venue'] if 'venue' in query_params else None
-            # date = query_params['date'] if 'date' in query_params else None
-
-        gigs = gm.get_gigs('bbb')
-
+        
+        filters = event['params']['querystring']
+        gigs = gm.get_gigs(filters)
         return gigs
 
     elif verb == "POST" and method == "/gigmanagement/addgigs":

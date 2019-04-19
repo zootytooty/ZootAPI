@@ -13,15 +13,26 @@ class GigManagement():
         self.cursor = self.conn.cursor()
 
 
-    def get_gigs(self, venue):
+    def get_gigs(self, filters={}):
+        """Sources gigs & their details
 
-        qry = """
-              SELECT *
-              FROM zootdb.gig_guide
-              WHERE venue = %s
-              """
+        TO-DO: Add default date filter
+        
+        
+        filters (dict, optional): Defaults to {}.
+                                  Items to filter by such as venue, date or artists
+    
+        Returns:
+            list: list of gigs
+        """
 
-        self.cursor.execute(qry, [venue])
+        # Create base query & any additional filters
+        sql = ["SELECT * FROM zootdb.gig_guide WHERE 1=1"]
+        for param in filters:
+            sql.append("AND {0} = %({0})s".format(param))
+
+        # Execute
+        self.cursor.execute(' '.join(sql), filters)
         return [response for response in self.cursor]
 
 
