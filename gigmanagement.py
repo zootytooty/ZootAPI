@@ -74,14 +74,30 @@ class GigManagement():
 
     def gig_prepper(self, gig):
 
+        performance_date = None
+        if gig['performance_date']:
+            performance_date =  self.datetime_date_to_string(gig['performance_date'], "%Y-%m-%d")
+
+        doors_open = None
+        if gig['doors_open']:
+            doors_open =  self.timedelta_to_string(gig['doors_open'], "%-I:%M %p")
+
+        music_starts = None
+        if gig['music_starts']:
+            music_starts =  self.timedelta_to_string(gig['music_starts'], "%-I:%M %p")
+
+        price = None
+        if gig['price']:
+            price =  float(gig['price'])
+
         return {
             'title': gig['title'],
             'venue': gig['venue'],
             'description': gig['description'],
-            'performance_date': self.datetime_date_to_string(gig['performance_date'], "%Y-%m-%d"),
-            'doors_open': self.timedelta_to_string(gig['doors_open'], "%-I:%M %p"),
-            'music_starts': self.timedelta_to_string(gig['music_starts'], "%-I:%M %p"),
-            'price': float(gig['price']),
+            'performance_date': performance_date,
+            'doors_open': doors_open,
+            'music_starts': music_starts,
+            'price': price,
             'url': gig['url'],
             'image_url': gig['image_url']
             }
