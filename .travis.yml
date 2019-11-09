@@ -9,38 +9,26 @@ env:
 script:
   - make
 
-# deploy:
-#   # Push code and configuration
-#   - provider: script
-#   - script: echo "help"
-#     script: aws lambda update-function-code --publish --region=ap-southeast-2 --function-name Get-Gigs --zip-file fileb://dist/zootapi.zip && aws lambda update-function-configuration --function-name Get-Gigs --region=ap-southeast-2 --environment "Variables={RDS_MASTER_USER=RDS_MASTER_USER,RDS_MASTER_PASSWORD=RDS_MASTER_PASSWORD,RDS_DATABASE_NAME=RDS_DATABASE_NAME,RDS_ENDPOINT=RDS_ENDPOINT}"
-
-
 
 deploy:
   provider: lambda
-  function_name: "Get-Gigs"
+  runtime: "python3.6"
   region: "ap-southeast-2"
   role: $ROLE_GET_GIGS
-  runtime: "python3.6"
+  function_name: "Get-Gigs"
   handler_name: "lambda_handler"
   module_name: "zootapi"
   zip: dist/zootapi.zip
+  environment:
+    - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
+    - RDS_MASTER_USER=$RDS_MASTER_USER
+    - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
+    - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
+    - RDS_ENDPOINT=$RDS_ENDPOINT
+  on:
+    branch: master
 
 
 
-  # provider: lambda
-  # runtime: python3.6
-  # publish: TRUE
-  # role: $ROLE_GET_GIGS
-  # function_name: "Get-Gigs"
-  # handler_name: "zootapi.lambda_handler"
-  # zip: dist/zootapi.zip
-  # environment:
-  #   - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
-  #   - RDS_MASTER_USER=$RDS_MASTER_USER
-  #   - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
-  #   - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
-  #   - RDS_ENDPOINT=$RDS_ENDPOINT
-  # on:
-  #     branch: master
+
+  
