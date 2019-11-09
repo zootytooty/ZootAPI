@@ -12,6 +12,7 @@ script:
 deploy:
   provider: lambda
   publish: TRUE
+  role: $ROLE_GET_GIGS
   function_name: "Get-Gigs"
   zip: dist/zootapi.zip
   environment:
