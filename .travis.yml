@@ -9,16 +9,22 @@ env:
 script:
   - make
 
+# deploy:
+#   # Push code and configuration
+#   - provider: script
+#   - script: echo "help"
+#     script: aws lambda update-function-code --publish --region=ap-southeast-2 --function-name Get-Gigs --zip-file fileb://dist/zootapi.zip && aws lambda update-function-configuration --function-name Get-Gigs --region=ap-southeast-2 --environment "Variables={RDS_MASTER_USER=RDS_MASTER_USER,RDS_MASTER_PASSWORD=RDS_MASTER_PASSWORD,RDS_DATABASE_NAME=RDS_DATABASE_NAME,RDS_ENDPOINT=RDS_ENDPOINT}"
+
+
+
 deploy:
-  # Push code
-  - provider: script
-  - script: aws lambda update-function-code --publish --region=ap-southeast-2 --function-name Get-Gigs --zip-file fileb://dist/zootapi.zip
-
-  # Add configuration
-  - provider: script
-  - script: aws lambda update-function-configuration --function-name Get-Gigs --region=ap-southeast-2 --environment "Variables={RDS_MASTER_USER=RDS_MASTER_USER,RDS_MASTER_PASSWORD=RDS_MASTER_PASSWORD,RDS_DATABASE_NAME=RDS_DATABASE_NAME,RDS_ENDPOINT=RDS_ENDPOINT}"
-
-
+  provider: lambda
+  function_name: "Get-Gigs"
+  region: "ap-southeast-2"
+  role: $ROLE_GET_GIGS
+  runtime: "python3.6"
+  handler_name: "zootapi.lambda_handler"
+  zip: dist/zootapi.zip
 
 
 
