@@ -1,22 +1,23 @@
 language: python
 python:
-	- '3.6'
+  - '3.6'
+
 
 env:
-	global:
-		- AWS_DEFAULT_REGION=ap-southeast-2
+  global:
+    - AWS_DEFAULT_REGION=ap-southeast-2
 
 script:
-	- make
+  - make
 
 deploy:
-	provider: lambda
-	publish: TRUE
-	function_name: "Get-Gigs"
-	zip: dist/zootapi.zip
-	environment:
-		- RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
-		- RDS_MASTER_USER=$RDS_MASTER_USER
-		- RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
-		- RDS_DATABASE_NAME=$RDS_DATABASE_NAME
-		- RDS_ENDPOINT=$RDS_ENDPOINT
+  provider: lambda
+  publish: TRUE
+  function_name: "Get-Gigs"
+  zip: dist/zootapi.zip
+  environment:
+    - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
+    - RDS_MASTER_USER=$RDS_MASTER_USER
+    - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
+    - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
+    - RDS_ENDPOINT=$RDS_ENDPOINT
