@@ -6,14 +6,37 @@ env:
   global:
     - AWS_DEFAULT_REGION=ap-southeast-2
 
+before_install:
+  - pip install --user awscli
+
 script:
   - make
 
 deploy:
   # Push code
   - provider: script
-    script: aws lambda update-function-code --publish --function-name Get-Gigs --zip-file fileb://dist/zootapi.zip
+  - script: aws lambda update-function-code --publish --region=ap-southeast-2 --function-name Get-Gigs --zip-file fileb://dist/zootapi.zip
 
   # Add configuration
   - provider: script
-    script: aws lambda update-function-configuration --function-name Get-Gigs --environment "Variables={RDS_MASTER_USER=RDS_MASTER_USER,RDS_MASTER_PASSWORD=RDS_MASTER_PASSWORD,RDS_DATABASE_NAME=RDS_DATABASE_NAME,RDS_ENDPOINT=RDS_ENDPOINT}"
+  - script: aws lambda update-function-configuration --function-name Get-Gigs --region=ap-southeast-2 --environment "Variables={RDS_MASTER_USER=RDS_MASTER_USER,RDS_MASTER_PASSWORD=RDS_MASTER_PASSWORD,RDS_DATABASE_NAME=RDS_DATABASE_NAME,RDS_ENDPOINT=RDS_ENDPOINT}"
+
+
+
+
+
+  # provider: lambda
+  # runtime: python3.6
+  # publish: TRUE
+  # role: $ROLE_GET_GIGS
+  # function_name: "Get-Gigs"
+  # handler_name: "zootapi.lambda_handler"
+  # zip: dist/zootapi.zip
+  # environment:
+  #   - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
+  #   - RDS_MASTER_USER=$RDS_MASTER_USER
+  #   - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
+  #   - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
+  #   - RDS_ENDPOINT=$RDS_ENDPOINT
+  # on:
+  #     branch: master
