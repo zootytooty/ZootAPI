@@ -1,8 +1,8 @@
 """
 Desc: 
 """
-
-import yaml
+import os
+# import yaml
 import pymysql as mysql
 import datetime
 
@@ -55,13 +55,18 @@ class GigManagement():
     def db_conn(self):
 
         # Just for testing & setup purposes
-        conf = yaml.load(open('conf.yaml', 'r'))
-        rds = conf['rds']
+        # conf = yaml.load(open('conf.yaml', 'r'))
+        # rds = conf['rds']
 
-        hostname = rds['endpoint']
-        username = rds['master-user']
-        password = rds['master-password']
-        database = rds['database-name']
+        # hostname = rds['endpoint']
+        # username = rds['master-user']
+        # password = rds['master-password']
+        # database = rds['database-name']
+        
+        hostname = os.environ['RDS_ENDPOINT']
+        username = os.environ['RDS_MASTER_USER']
+        password = os.environ['RDS_MASTER_PASSWORD']
+        database = os.environ['RDS_DATABASE_NAME']
 
         conn = mysql.connect(host=hostname,
                              user=username, 
