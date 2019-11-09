@@ -27,13 +27,4 @@ deploy:
     on:
       branch: master
   - provider: script
-    script: "aws lambda update-function-configuration --function-name Get-Gigs  \
-                                --environment {"Variables":{"RDS_INTANCE_IDENTIFIER":${RDS_INTANCE_IDENTIFIER}, \
-                                                         "RDS_MASTER_USER":${RDS_MASTER_USER}, \
-                                                         "RDS_MASTER_PASSWORD":${RDS_MASTER_PASSWORD}, \
-                                                         "RDS_DATABASE_NAME":${RDS_DATABASE_NAME}, \
-                                                         "RDS_ENDPOINT":${RDS_ENDPOINT}}}"
-
-
-
-  
+    script: "aws lambda update-function-configuration --function-name Get-Gigs --environment {"Variables":{"RDS_INTANCE_IDENTIFIER":${RDS_INTANCE_IDENTIFIER}, "RDS_MASTER_USER":${RDS_MASTER_USER}, "RDS_MASTER_PASSWORD":${RDS_MASTER_PASSWORD}, "RDS_DATABASE_NAME":${RDS_DATABASE_NAME}, "RDS_ENDPOINT":${RDS_ENDPOINT}}}"
