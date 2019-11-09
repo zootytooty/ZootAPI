@@ -2,8 +2,6 @@ language: python
 python:
   - '3.6'
 
-sudo: false
-
 env:
   global:
     - AWS_DEFAULT_REGION=ap-southeast-2
