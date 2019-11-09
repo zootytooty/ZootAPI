@@ -2,7 +2,6 @@
 Desc: 
 """
 import os
-# import yaml
 import pymysql as mysql
 import datetime
 

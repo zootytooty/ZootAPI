@@ -1,6 +1,5 @@
 import boto3
 import json
-import yaml
 
 from gigmanagement import GigManagement
 gm = GigManagement()

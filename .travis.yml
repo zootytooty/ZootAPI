@@ -18,10 +18,8 @@ deploy:
     handler_name: "lambda_handler"
     module_name: "zootapi"
     zip: dist/zootapi.zip
-    # environment_variables:
-    #   - 'DB_URL="123=456"'
+
     environment_variables:
-      # RDS_INTANCE_IDENTIFIER: $RDS_INTANCE_IDENTIFIER
       - RDS_MASTER_USER=$RDS_MASTER_USER
       - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
       - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
