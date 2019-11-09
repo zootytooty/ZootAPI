@@ -14,6 +14,7 @@ deploy:
   publish: TRUE
   role: $ROLE_GET_GIGS
   function_name: "Get-Gigs"
+  handler_name: "zootapi.lambda_handler"
   zip: dist/zootapi.zip
   environment:
     - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
