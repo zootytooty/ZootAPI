@@ -9,7 +9,6 @@ env:
 script:
   - make
 
-
 deploy:
   provider: lambda
   runtime: "python3.6"
@@ -19,12 +18,11 @@ deploy:
   handler_name: "lambda_handler"
   module_name: "zootapi"
   zip: dist/zootapi.zip
-  environment:
-    - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
-    - RDS_MASTER_USER=$RDS_MASTER_USER
-    - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
-    - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
-    - RDS_ENDPOINT=$RDS_ENDPOINT
+  environment: RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
+    # - RDS_MASTER_USER=$RDS_MASTER_USER
+    # - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
+    # - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
+    # - RDS_ENDPOINT=$RDS_ENDPOINT
   on:
     branch: master
 
