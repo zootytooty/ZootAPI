@@ -2,7 +2,6 @@ language: python
 python:
   - '3.6'
 
-
 env:
   global:
     - AWS_DEFAULT_REGION=ap-southeast-2
@@ -21,3 +20,5 @@ deploy:
     - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
     - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
     - RDS_ENDPOINT=$RDS_ENDPOINT
+  on:
+      branch: master
