@@ -11,6 +11,7 @@ script:
 
 deploy:
   provider: lambda
+  runtime: python3.6
   publish: TRUE
   role: $ROLE_GET_GIGS
   function_name: "Get-Gigs"
