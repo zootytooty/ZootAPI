@@ -23,7 +23,8 @@ deploy:
   region: "ap-southeast-2"
   role: $ROLE_GET_GIGS
   runtime: "python3.6"
-  handler_name: "zootapi.lambda_handler"
+  handler_name: "lambda_handler"
+  module_name: "zootapi"
   zip: dist/zootapi.zip
 
 
