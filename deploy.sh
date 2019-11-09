@@ -60,5 +60,24 @@ then
     rm -r ./tmp && exit 1
 fi
 
+# Clean up working folder
+rm -r ./tmp
+
+# Read in rds config
+if [ ! -f ../secrets/rds_config ]
+then 
+    echo "RDS config not found"
+    exit 1
+else 
+    source ../secrets/rds_config
+fi
+
 # Push to AWS
-aws lambda update-function-code --publish --function-name Get-Gigs --zip-file fileb://ZootAPI.zip
+aws lambda update-function-code --publish  \
+                                --function-name Get-Gigs  \
+                                --zip-file fileb://${DEPLOY_PACKAGE}  \
+                                --environment {"Variables":{"RDS_INTANCE_IDENTIFIER":${RDS_INTANCE_IDENTIFIER}, \
+                                                         "RDS_MASTER_USER":${RDS_MASTER_USER}, \
+                                                         "RDS_MASTER_PASSWORD":${RDS_MASTER_PASSWORD}, \
+                                                         "RDS_DATABASE_NAME":${RDS_DATABASE_NAME}, \
+                                                         "RDS_ENDPOINT":${RDS_ENDPOINT}}}
