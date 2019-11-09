@@ -5,7 +5,6 @@ import yaml
 from gigmanagement import GigManagement
 gm = GigManagement()
 
-# Test if shit be workin
 
 def lambda_handler(event, context):
 
