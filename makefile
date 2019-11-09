@@ -13,7 +13,7 @@ copy:
   cp -R src/* build/
 
 zip: build_dist
-  cd build && zip -r ../dist/lambda.zip .
+  cd build && zip -r ../dist/zootapi.zip .
 
 clean:
   rm -rf build
