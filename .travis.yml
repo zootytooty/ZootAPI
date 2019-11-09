@@ -25,3 +25,4 @@ deploy:
     - RDS_ENDPOINT=$RDS_ENDPOINT
   on:
       branch: master
+  edge: true
