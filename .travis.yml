@@ -1,7 +1,24 @@
 language: python
 python:
-  - "3.6"
+  - '3.6'
 
+sudo: false
 
-install:
-  - pip install -r requirements.txt --target .
+env:
+  global:
+    - AWS_DEFAULT_REGION=ap-southeast-2
+
+before_deploy:
+  - make
+
+deploy:
+  provider: lambda
+  publish: TRUE
+  function_name: "Get-Gigs"
+  zip: dist/zootapi.zip
+  environment:
+    - RDS_INTANCE_IDENTIFIER=$RDS_INTANCE_IDENTIFIER
+    - RDS_MASTER_USER=$RDS_MASTER_USER
+    - RDS_MASTER_PASSWORD=$RDS_MASTER_PASSWORD
+    - RDS_DATABASE_NAME=$RDS_DATABASE_NAME
+    - RDS_ENDPOINT=$RDS_ENDPOINT
