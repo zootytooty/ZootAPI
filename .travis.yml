@@ -12,7 +12,7 @@ script:
 deploy:
   provider: lambda
   runtime: python3.6
-  publish: TRUE
+  # publish: TRUE
   role: $ROLE_GET_GIGS
   function_name: "Get-Gigs"
   handler_name: "zootapi.lambda_handler"
