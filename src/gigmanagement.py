@@ -71,7 +71,10 @@ class GigManagement():
 
         performance_date = None
         if gig['performance_date']:
-            performance_date =  self.datetime_date_to_string(gig['performance_date'], "%Y-%m-%d")
+            try:
+                performance_date =  self.datetime_date_to_string(gig['performance_date'], "%Y-%m-%d")
+            except:
+                pass
 
         doors_open = None
         if gig['doors_open']:
