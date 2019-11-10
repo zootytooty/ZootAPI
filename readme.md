@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/zootytooty/ZootAPI.svg?branch=master)](https://travis-ci.org/zootytooty/ZootAPI)
-
-# ZootAPI
+# ZootAPI       [![Build Status](https://travis-ci.org/zootytooty/ZootAPI.svg?branch=master)](https://travis-ci.org/zootytooty/ZootAPI)
 
 Basic API to manage database interactions. It manages the following datapoints:
 - venue    
