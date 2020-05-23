@@ -1,6 +1,7 @@
 # Exclude package items
 ZootAPI.zip
 package/
+.DS_Store
 
 
 
