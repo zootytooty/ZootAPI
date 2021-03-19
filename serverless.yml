@@ -1,0 +1,23 @@
+service: zootapi
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+
+package:
+  exclude:
+    - node_modules/**
+    - LICENSE
+    - README.md
+    - package.json
+    - package-lock.json
+    - requirements.txt
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: ap-southeast-2
+  lambdaHashingVersion: 20201221
+
