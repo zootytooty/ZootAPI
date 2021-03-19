@@ -109,3 +109,38 @@ The response is a JSON containing the number of records added, eg:
 ```shell
 deploy.sh
 ```
+
+## Setting up your dev environment
+
+A whole bunch of the info above is about to become irrelevant as we transition to the serverless framework and dynamodb (which will hopefully be cheaper), and rationalise the API so it conforms with RESTful conventions.
+
+If nothing else hopefully this'll result in a better development experience.
+
+- Install the [serverless framework](https://www.serverless.com/framework/docs/) as a global dependency.
+    ```bash
+    $ npm install -g serverless
+    ```
+
+- Install the project dependencies (make sure you're in the project root).
+    ```bash
+    ./zootapi $ npm ci
+    ```
+
+- Install docker and docker-compose. We'll use these to run dynamodb locally. I did it with [homebrew](https://brew.sh/).
+    ```bash
+    $ brew install cask docker
+    ```
+
+- Bring up the local dynamodb, run database migrations, and start the serverless offline environment
+    ```bash
+    ./zootapi $ npm run dev:start
+    ```
+
+- We also have scripts to bring up, migrate, and tear down the database if you ever want to run it without the serverless environment.
+    ```bash
+    $ npm run localdb:start
+    $ npm run localdb:migrate
+    $ npm run localdb:stop
+    ```
+
+Now hack damn you, for all that is good and sacred!
