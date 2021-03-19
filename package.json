@@ -1,6 +1,6 @@
 {
   "name": "zootapi",
-  "description": "",
+  "description": "An API to CRUD gigs, and maybe someday venues, users, and more!",
   "version": "0.1.0",
   "scripts": {
     "localdb:start": "cd dev && docker-compose up -d",
