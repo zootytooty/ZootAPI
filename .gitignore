@@ -3,7 +3,8 @@ ZootAPI.zip
 package/
 .DS_Store
 
-
+# Local dev database
+local-dynamodb/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
