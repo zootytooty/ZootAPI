@@ -131,7 +131,7 @@ If nothing else hopefully this'll result in a better development experience.
     $ brew install cask docker
     ```
 
-- Bring up the local dynamodb, run database migrations, and start the serverless offline environment
+- Bring up the local dynamodb, run database migrations, and start the serverless offline environment. This will watch for changes to source files and will restart the offline serverless environment when they're detected.
     ```bash
     ./zootapi $ npm run dev:start
     ```
