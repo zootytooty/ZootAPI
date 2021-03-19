@@ -3,10 +3,13 @@
   "description": "",
   "version": "0.1.0",
   "scripts": {
-    "devdb:start": "docker-compose up -d",
-    "devdb:stop": "docker-compose down"
+    "localdb:start": "cd dev && docker-compose up -d",
+    "localdb:stop": "cd dev && docker-compose down",
+    "dev": "npm run localdb:start && nodemon --watch ./source --exec serverless offline start"
   },
   "devDependencies": {
+    "nodemon": "^2.0.7",
+    "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.8.0",
     "serverless-python-requirements": "^5.1.0"
   }
