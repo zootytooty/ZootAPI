@@ -5,7 +5,7 @@
   "scripts": {
     "localdb:start": "cd dev && docker-compose up -d",
     "localdb:stop": "cd dev && docker-compose down",
-    "dev": "npm run localdb:start && nodemon --watch ./source --exec serverless offline start"
+    "dev": "npm run localdb:start && nodemon --ext py --watch ./src --exec serverless offline start"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
