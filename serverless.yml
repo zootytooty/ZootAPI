@@ -19,6 +19,9 @@ custom:
     migration:
       dir: dev/migrations
 
+  pythonRequirements:
+    dockerizePip: true
+
 package:
   exclude:
     - node_modules/**
@@ -27,7 +30,7 @@ package:
     - package.json
     - package-lock.json
     - requirements.txt
-    - local-dynamodb/**
+    - dev/**
 
 provider:
   name: aws
