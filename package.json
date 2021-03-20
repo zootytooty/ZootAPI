@@ -12,6 +12,6 @@
     "nodemon": "^2.0.7",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.8.0",
-    "serverless-python-requirements": "^5.1.0"
+    "serverless-python-requirements": "^4.2.5"
   }
 }
