@@ -1,11 +1,11 @@
 import json
 import uuid
 
-from gig_model import GigModel
+from .gig_model import GigModel
 
 
 def create(event, context):
-    data = event["body"]
+    data = json.loads(event["body"])
     response = {}
 
     gig = GigModel(
