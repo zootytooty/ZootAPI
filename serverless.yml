@@ -49,6 +49,15 @@ provider:
         - dynamodb:DescribeTable
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/gigs"
 
+functions:
+  create:
+    handler: src/api/gigs.create
+    events:
+      - http:
+          path: gigs/
+          method: post
+          cors: true
+
 resources:
   Resources:
     GigsDynamoDbTable:
@@ -57,11 +66,11 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: id
+            AttributeName: gig_id
             AttributeType: S
         KeySchema:
           -
-            AttributeName: id
+            AttributeName: gig_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 5
