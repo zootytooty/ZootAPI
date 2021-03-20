@@ -51,7 +51,7 @@ provider:
 
 functions:
   create:
-    handler: src/api/gigs.create
+    handler: src/api/gigs/gigs.create
     events:
       - http:
           path: gigs/
