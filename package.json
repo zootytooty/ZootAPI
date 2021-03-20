@@ -6,7 +6,7 @@
     "localdb:start": "cd dev && docker-compose up -d",
     "localdb:stop": "cd dev && docker-compose down",
     "localdb:migrate": "serverless dynamodb migrate",
-    "dev": "npm run localdb:start && nodemon --ext py --watch ./src --exec serverless offline start"
+    "dev": "npm run localdb:start && nodemon --ext py --watch ./src --watch ./serverless.yml --exec serverless offline start"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
