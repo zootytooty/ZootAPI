@@ -39,5 +39,5 @@ def create(event, context):
         response["status"] = 500
         response["body"] = {"error": "Error saving gig"}
 
-    response["body"] = json.dumps(response['body'])
+    response["body"] = json.dumps(response['body'], default=str)
     return response
