@@ -84,6 +84,18 @@ functions:
                 venue: false
                 limit: false
 
+  delete:
+    handler: src/api/gigs/gigs.delete
+    events:
+      - http:
+          path: gigs/{id}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+
 resources:
   Resources:
     GigsDynamoDbTable:
