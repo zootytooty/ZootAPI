@@ -58,6 +58,18 @@ functions:
           method: post
           cors: true
   
+  get:
+    handler: src/api/gigs/gigs.get
+    events:
+      - http:
+          path: gigs/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+
   list:
     handler: src/api/gigs/gigs.list
     events:

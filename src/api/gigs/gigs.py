@@ -89,3 +89,18 @@ def list(event, context):
         response["statusCode"] = 500
         response["body"] = json.dumps({"error": "Error fetching gigs from database"})
         return response
+
+def get(event, context):
+    response = {}
+    gig_id = event["pathParameters"]["id"]
+
+    try:
+        gig = GigModel.get(gig_id)
+
+        response["statusCode"] = 200
+        response["body"] = json.dumps(gig.as_dict(), default=str)
+        return response
+    except:
+        response["statusCode"] = 404
+        response["body"] = json.dumps({"error": f"Gig with id '{gig_id}' not found"})
+        return response
