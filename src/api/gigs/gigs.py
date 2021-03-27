@@ -1,7 +1,10 @@
 import json
 import uuid
 
-from datetime import datetime
+from datetime import datetime, timedelta
+from functools import reduce
+from pynamodb.expressions.condition import And
+
 from .gig_model import GigModel
 
 
@@ -10,7 +13,7 @@ def create(event, context):
     try:
         data = json.loads(event["body"])
     except json.decoder.JSONDecodeError:
-        response["status"] = 400
+        response["statusCode"] = 400
         response["body"] = json.dumps({"error": "Invalid JSON"})
         return response
 
@@ -28,17 +31,61 @@ def create(event, context):
             image_url=data["image_url"],
         )
     except KeyError as err:
-        response["status"] = 400
+        response["statusCode"] = 400
         response["body"] = json.dumps({"error": f"{err} is required"})
         return response
 
     try:
         gig.save()
-        response["status"] = 201
+        response["statusCode"] = 201
         response["body"] = gig.as_dict()
     except:
-        response["status"] = 500
+        response["statusCode"] = 500
         response["body"] = {"error": "Error saving gig"}
 
     response["body"] = json.dumps(response["body"], default=str)
     return response
+
+
+def list(event, context):
+    limit = None
+    filters = []
+    response = {}
+    results = []
+
+    params = event["queryStringParameters"]
+    
+    if params:
+        for key, value in params.items():
+            if key == "date":
+                try:
+                    date = datetime.strptime(value, "%Y-%m-%d")
+                    filters.append(GigModel.performance_date.between(date, date + timedelta(days=1)))
+                except ValueError:
+                    response["statusCode"] = 400
+                    response["body"] = json.dumps({"error": f"Date must be fomratted YYYY-MM-DD. Received '{value}'"})
+                    return response
+            if key == "venue":
+                filters.append(GigModel.venue == value)
+            if key == "limit":
+                try:
+                    limit = int(value)
+                except ValueError:
+                    response["statusCode"] = 400
+                    response["body"] = json.dumps({"error": f"Limit must be a number. Received '{value}'"})
+                    return response
+
+    if len(filters) == 0:
+        filters = None
+    else:
+        filters = reduce(And, filters)
+    try:
+        for gig in GigModel.scan(filter_condition=filters, limit=limit):
+            results.append(gig.as_dict())
+        response["statusCode"] = 200
+        response["body"] = json.dumps(results, default=str)
+        return response
+    except:
+        response["statusCode"] = 500
+        response["body"] = json.dumps({"error": "Error fetching gigs from database"})
+        return response
