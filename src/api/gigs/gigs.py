@@ -17,6 +17,7 @@ def create(event, context):
     try:
         gig = GigModel(
             gig_id=str(uuid.uuid1()),
+            venue=data["venue"],
             title=data["title"],
             music_starts=data["music_starts"],
             doors_open=data["doors_open"],
@@ -39,5 +40,5 @@ def create(event, context):
         response["status"] = 500
         response["body"] = {"error": "Error saving gig"}
 
-    response["body"] = json.dumps(response['body'], default=str)
+    response["body"] = json.dumps(response["body"], default=str)
     return response

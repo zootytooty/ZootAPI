@@ -21,6 +21,7 @@ class GigModel(Model):
         return {key: getattr(self, key) for key in self._get_attributes().keys()}
 
     gig_id = UnicodeAttribute(hash_key=True, null=False)
+    venue = UnicodeAttribute(null=False)
     title = UnicodeAttribute(null=False)
     music_starts = UnicodeAttribute(null=True)
     doors_open = UnicodeAttribute(null=False)
