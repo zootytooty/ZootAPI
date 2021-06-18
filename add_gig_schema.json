@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Zoot API - Add Gig Schema",
+    "description": "Adding gig information",
+    "type": "object",
+    "properties": {
+        "venue":{
+            "description": "The venue name",
+            "type": "string"
+        },
+        "title":{
+            "description": "Title of the gig",
+            "type": "string"
+        },
+        "music_starts":{
+            "description": "Time the playing is expected to commence",
+            "type": "string",
+            "format": "time"
+        },
+        "doors_open":{
+            "description": "Time the venue doors are expected to open",
+            "type": "string",
+            "format": "time"
+        },
+        "performance_date":{
+            "description": "Date of the gig",
+            "type": "string",
+            "format": "date"
+        },
+        "price":{
+            "description": "Price of the show",
+            "type": "number",
+            "minimum": 0
+        },
+        "description":{
+            "description": "Description of the gig from the list",
+            "type": "string"
+        },
+        "url":{
+            "description": "URL to the gig listing",
+            "type": "string",
+            "format": "uri"
+        },
+        "image_url":{
+            "description": "URL to the gig cover image",
+            "type": "string",
+            "format": "uri"
+        }
+    },
+    "required": ["venue", "title", "music_starts", "doors_open", "performance_date", "price", "description", "url", "image_url"]
+}
