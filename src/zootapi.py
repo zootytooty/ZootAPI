@@ -1,38 +1,63 @@
-import boto3
+"""Entry point for API."""
+
 import json
+import os
+from typing import List
 
 from gigmanagement import GigManagement
-gm = GigManagement()
 
 
-def manager(event, context):
+gm = GigManagement(
+    username=os.getenv("MONGO_USERNAME"),
+    password=os.getenv("MONGO_PASSWORD"),
+    connection_string=os.getenv("MONGO_CONNECTION_STRING"),
+)
 
-    # Identify request intent
-    verb = event['context']['http-method']
-    method = event['context']['resource-path']
 
-    # Pass to the appropriate function
-    if verb == "GET" and method == "/gigmanagement/getgigs":
+def get_gigs(event: dict, context: object) -> List[dict]:
+    """Entry point for GET-gigs API, retrieving gigs based on the requst details.
 
-        filters = event['params']['querystring']
+    Args:
+        event (dict): API request including gateway information
+        context (object): Methods and properties that provide information about the invocation,
+                          function, and execution environment
+
+    Returns:
+        List[dict]: All known gigs based on the request parameters
+    """
+    try:
+        filters = event["params"]["querystring"]
         gigs = gm.get_gigs(filters)
         return gigs
 
-    elif verb == "POST" and method == "/gigmanagement/addgigs":
+    except Exception as ex:
 
-        gigs_to_add = event['body-json']
+        response = {"statusCode": 500, "error": json.dumps(str(ex))}
+        return response
 
+
+def add_gigs(event: dict, context: object) -> dict:
+    """Entry point for POST-gigs API, inserting the provided gig/s.
+
+    Args:
+        event (dict): API request including gateway information
+        context (object): Methods and properties that provide information about the invocation,
+                          function, and execution environment
+
+    Returns:
+        dict: Number of records successfully added.
+    """
+    try:
+        gigs_to_add = event["body-json"]
+
+        # If only a single gig is provided, then turn it into a pseudo batch request of length 1
         if isinstance(gigs_to_add, dict):
             gigs_to_add = [gigs_to_add]
 
         response = gm.add_gigs(gigs_to_add)
         return response
-        
 
-    else:
-        # Return some error....
+    except Exception as ex:
 
-        return {
-            "status": "incorrect method &/or verb combo"
-        }
-
+        response = {"statusCode": 500, "error": json.dumps(str(ex))}
+        return response
