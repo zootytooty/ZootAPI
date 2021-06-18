@@ -1,0 +1,49 @@
+service: zoot-api
+
+provider:
+  name: aws
+  timeout: 60
+  runtime: python3.9
+  region: ${env:AWS_REGION}
+  environment:
+    MONGO_USERNAME: ${env:MONGO_USERNAME}
+    MONGO_PASSWORD: ${env:MONGO_PASSWORD}
+    MONGO_CONNECTION_STRING: ${env:MONGO_CONNECTION_STRING}
+
+
+functions:
+  getgigs:
+    module: src
+    handler: zootapi.get_gigs
+    include:
+      - src/**
+    events:
+      - http:
+          path: gigs
+          method: get
+          querystrings:
+            venue: false
+            performance_date: false
+
+  addgigs:
+    module: src
+    handler: zootapi.add_gigs
+    include:
+      - src/**
+    events:
+      - http:
+          path: gigs
+          method: post
+          request:
+            schema:
+              application/json: ${file(add_gig_schema.json)}
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+
+package:
+  individually: true
