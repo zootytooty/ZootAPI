@@ -1,1 +1,1 @@
-pymysql
+pymongo[tls,srv]
