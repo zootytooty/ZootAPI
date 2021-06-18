@@ -1,4 +1,4 @@
-"""Entry point for API."""
+"""Entry point for Zoot API."""
 
 import json
 import os
