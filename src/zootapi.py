@@ -5,7 +5,7 @@ from gigmanagement import GigManagement
 gm = GigManagement()
 
 
-def lambda_handler(event, context):
+def manager(event, context):
 
     # Identify request intent
     verb = event['context']['http-method']
