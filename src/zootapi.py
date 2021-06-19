@@ -11,6 +11,7 @@ gm = GigManagement(
     username=os.getenv("MONGO_USERNAME"),
     password=os.getenv("MONGO_PASSWORD"),
     connection_string=os.getenv("MONGO_CONNECTION_STRING"),
+    database="zootdb",
 )
 
 
@@ -26,9 +27,11 @@ def get_gigs(event: dict, context: object) -> List[dict]:
         List[dict]: All known gigs based on the request parameters
     """
     try:
-        filters = event["params"]["querystring"]
+        filters = event["queryStringParameters"]
         gigs = gm.get_gigs(filters)
-        return gigs
+        response = {"statusCode": 200, "body": json.dumps(gigs)}
+
+        return response
 
     except Exception as ex:
 
@@ -48,13 +51,15 @@ def add_gigs(event: dict, context: object) -> dict:
         dict: Number of records successfully added.
     """
     try:
-        gigs_to_add = event["body-json"]
+        gigs_to_add = json.loads(event["body"])
 
         # If only a single gig is provided, then turn it into a pseudo batch request of length 1
         if isinstance(gigs_to_add, dict):
             gigs_to_add = [gigs_to_add]
 
         response = gm.add_gigs(gigs_to_add)
+        response = {"statusCode": 200, "body": json.dumps(response)}
+
         return response
 
     except Exception as ex:
