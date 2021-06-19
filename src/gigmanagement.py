@@ -1,110 +1,185 @@
-"""
-Desc: 
-"""
-import os
-import pymysql as mysql
+"""Class to control CRUD gig handling functionality."""
+
 import datetime
 
-
-class GigManagement():
-
-    def __init__(self):
-        self.conn = self.db_conn()
-        self.cursor = self.conn.cursor()
+import pymongo
 
 
-    def get_gigs(self, filters={}):
-        """Sources gigs & their details
+class GigManagement:
+    def __init__(
+        self: object,
+        username: str,
+        password: str,
+        connection_string: str,
+        database: str,
+    ):
+        self.conn = self.db_conn(
+            username=username,
+            password=password,
+            connection_string=connection_string,
+            database=database,
+        )
+
+    @staticmethod
+    def db_conn(
+        username: str,
+        password: str,
+        connection_string: str,
+        database: str,
+    ) -> pymongo.database.Database:
+        """Creates MongoDB database connection.
+
+        Args:
+            username (str): DB Username
+            password (str): DB Password
+            connection_string (str): URI Connection String
+            database (str): Database name to connect to
+
+        Returns:
+            pymongo.database.Database: Instantiated MongoDB object
+        """
+        connection_string = connection_string.format(
+            username=username, password=password
+        )
+
+        client = pymongo.MongoClient(connection_string)
+        return client.get_database(database)
+
+    def get_gigs(self: object, filters: dict = {}):
+        """Sources gigs & their details.
 
         TO-DO: Add default date filter
-        
+
         Args:
             filters (dict, optional): Defaults to {}.
                                       Items to filter by such as venue, date or artists
-    
+
         Returns:
             list: list of gigs
         """
+        return [self.gig_prepper(gig) for gig in self.conn.gigs.find(filters)]
 
-        # Create base query & any additional filters
-        sql = ["SELECT * FROM zootdb.gig_guide WHERE 1=1"]
-        for param in filters:
-            sql.append("AND {0} = %({0})s".format(param))
+    def add_gigs(self: object, values: list) -> dict:
+        """Method to insert one or many gigs into the database.
+        Performs an upsert, thus if an identical (all attributes match) gig is present,
+        it will be replaced in order to avoid duplicates
 
-        # Execute
-        self.cursor.execute(' '.join(sql), filters)
-        return [self.gig_prepper(response) for response in self.cursor]
+        Args:
+            self (object): GigManagement Class
+            values (list): The gigs to insert
 
+        Returns:
+            dict: Metadata regarding the insert attempt, containing:
+                    - Records attempted
+                    - Existing records updated
+                    - New records inserted
+        """
+        # Upsert new gigs into the DB
+        upserted_gigs = [self.conn.gigs.update(gig, gig, upsert=True) for gig in values]
 
-    def add_gigs(self, values):
+        return self.extract_upsert_metadata(upserted_gigs)
 
-        sql = """INSERT INTO zootdb.gig_guide (venue, title, music_starts, doors_open, performance_date, price, description, url, image_url) 
-                 VALUES (%(venue)s, %(title)s, %(music_starts)s, %(doors_open)s, %(performance_date)s, %(price)s, %(description)s, %(url)s, %(image_url)s)"""
+    @staticmethod
+    def extract_upsert_metadata(attempts: list) -> dict:
+        """Collects desired metadata from the attempted upserts.
 
-        self.cursor.executemany(sql, values)
-        self.conn.commit()
+        Args:
+            attempts (list): Upsert response objects from mongodb
 
-        response = {
-            "records_added": self.cursor.rowcount,
+        Returns:
+            dict: Metadata regarding the insert attempt, containing:
+                    - Records attempted
+                    - Existing records updated
+                    - New records inserted
+        """
+        attempted = len(attempts)
+        updated = 0
+        added = 0
+
+        for attempt in attempts:
+            if attempt["nModified"] > 0:
+                updated += attempt["nModified"]
+            else:
+                added += 1
+
+        return {
+            "records_attempted": attempted,
+            "records_updates": updated,
+            "records_added": added,
         }
 
-        return response
-    
+    def gig_prepper(self: object, gig: dict) -> dict:
+        """Cleans up & standardises formatting of gigs prior to return
 
-    def db_conn(self):
-        
-        hostname = os.environ['RDS_ENDPOINT']
-        username = os.environ['RDS_MASTER_USER']
-        password = os.environ['RDS_MASTER_PASSWORD']
-        database = os.environ['RDS_DATABASE_NAME']
+        Args:
+            self (object): GigManagement Class
+            gig (dict): Gig object and values
 
-        conn = mysql.connect(host=hostname,
-                             user=username, 
-                             passwd=password, 
-                             db=database,
-                             cursorclass=mysql.cursors.DictCursor)
-
-        return conn
-
-
-    def gig_prepper(self, gig):
-
+        Returns:
+            dict: Standardised gig object
+        """
         performance_date = None
-        if gig['performance_date']:
+        if gig["performance_date"]:
             try:
-                performance_date =  self.datetime_date_to_string(gig['performance_date'], "%Y-%m-%d")
-            except:
+                performance_date = self.datetime_date_to_string(
+                    gig["performance_date"], "%Y-%m-%d"
+                )
+            except Exception:
                 pass
 
         doors_open = None
-        if gig['doors_open']:
-            doors_open =  self.timedelta_to_string(gig['doors_open'], "%-I:%M %p")
+        if gig["doors_open"]:
+            doors_open = self.format_time_string(gig["doors_open"], "%-I:%M %p")
 
         music_starts = None
-        if gig['music_starts']:
-            music_starts =  self.timedelta_to_string(gig['music_starts'], "%-I:%M %p")
+        if gig["music_starts"]:
+            music_starts = self.format_time_string(gig["music_starts"], "%-I:%M %p")
 
         price = None
-        if gig['price']:
-            price =  float(gig['price'])
+        if gig["price"]:
+            price = float(gig["price"])
 
         return {
-            'title': gig['title'],
-            'venue': gig['venue'],
-            'description': gig['description'],
-            'performance_date': performance_date,
-            'doors_open': doors_open,
-            'music_starts': music_starts,
-            'price': price,
-            'url': gig['url'],
-            'image_url': gig['image_url']
-            }
+            "title": gig["title"],
+            "venue": gig["venue"],
+            "description": gig["description"],
+            "performance_date": performance_date,
+            "doors_open": doors_open,
+            "music_starts": music_starts,
+            "price": price,
+            "url": gig["url"],
+            "image_url": gig["image_url"],
+        }
 
+    @staticmethod
+    def format_time_string(string: str, format: str) -> str:
+        """Converts a time string into the requested format.
 
-    def timedelta_to_string(self, time, format):
-        return (datetime.datetime.min + time).strftime(format)
+        Args:
+            string (str): Starting time string
+            format (str): Desired time format
 
-    def datetime_date_to_string(self, date, format):
+        Returns:
+            str: Time reformatted into desired format
+        """
+        # Convert timestamp object
+        try:
+            dt = datetime.datetime.strptime(string, "%H:%M:%S")
+        except Exception:
+            dt = datetime.datetime.strptime(string, "%H:%M")
+
+        # Reformat
+        return dt.strftime(format)
+
+    @staticmethod
+    def datetime_date_to_string(date: datetime.date, format: str) -> str:
+        """Converts a date string into the requested format.
+
+        Args:
+            date (datetime.date): Starting date object
+            format (str): Desired date format
+
+        Returns:
+            str: Date reformatted into desired format
+        """
         return date.strftime(format)
-
-
