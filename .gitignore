@@ -4,6 +4,9 @@ package/
 .DS_Store
 
 node_modules/
+*.zip
+cloudformation*.*
+serverless*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
