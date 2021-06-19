@@ -104,7 +104,7 @@ class GigManagement:
 
         return {
             "records_attempted": attempted,
-            "records_updates": updated,
+            "records_updated": updated,
             "records_added": added,
         }
 
