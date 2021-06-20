@@ -1,4 +1,5 @@
-# ZootAPI       [![Build Status](https://travis-ci.org/zootytooty/ZootAPI.svg?branch=master)](https://travis-ci.org/zootytooty/ZootAPI)
+# ZootAPI       [![Deploy](https://github.com/zootytooty/ZootAPI/actions/workflows/deploy.yml/badge.svg)](https://github.com/zootytooty/ZootAPI/actions/workflows/deploy.yml)
+
 
 Basic API to manage database interactions. It manages the following datapoints:
 - venue    
@@ -11,18 +12,30 @@ Basic API to manage database interactions. It manages the following datapoints:
 - url    
 - image_url 
 
+
+## Deployment
+
+The API is managed via the [serverless framework](https://www.serverless.com/), using an AWS backend. To deploy, install the dependencies then run deploy using your desired AWS profile.
+
+```bash
+npm install
+sls deploy --aws-profile <profile-name>
+```
+
+
 ## Functionality
 
-All methods are within `gigmanagement`
+All methods are within `gigmanagement.py`
+
 
 ### Get Gigs
 
-`/gigmanagement/getgigs`
+`GET: gigs`
 
-By default returns all shows, but in the past and future. The API supports querystring filtering but any of the above listed data points, eg:
+By default returns all shows; shows from the past and future. The API supports querystring filtering by any of the above listed data points, eg:
 ```http
-/gigmanagement/getgigs/venue=jazzlab
-/gigmanagement/getgigs/venue=paris_cat&date=YYYYMMDD
+/gigs?venue=jazzlab
+/gigs?venue=paris_cat&date=YYYYMMDD
 ```
 
 The response is a JSON array containing the shows requested, eg:
@@ -56,7 +69,7 @@ The response is a JSON array containing the shows requested, eg:
 
 ### Add Gigs
 
-`/gigmanagement/addgigs`
+`POST: gigs`
 
 Insert process to add new shows. The API supports both single & batch requests. Both require a gig object to be provided which should resemble:
 ```json
@@ -91,21 +104,11 @@ For single items, submit just the above object. For batch requests submit an arr
 ]
 ```
 
-The response is a JSON containing the number of records added, eg:
+The response is a JSON containing the number of records attempted, updated and added, eg:
 ```JSON
 {
-    "records_added": 4
+    "records_attempted": 3,
+    "records_updated": 2,
+    "records_added": 1
 }
-```
-
-
-## Requirements
-- AWS Lambda funciton called "Get-Gigs"
-- RDS Instance with connection details in a conf.yaml
-
-
-## Deployment
-
-```shell
-deploy.sh
 ```
