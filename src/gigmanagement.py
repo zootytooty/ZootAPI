@@ -63,7 +63,7 @@ class GigManagement:
         """Method to insert one or many gigs into the database.
         Performs an upsert, based on the following premise:
             - Assume that if the date, venue, start time & price match then it's the same gig
-            - If they match then update the gig as it's possible for the title or description to change
+            - If they match then update the gig. Possibly for the title or description changed
             - Hopefully this removes the presence of duplicates
 
         Args:
@@ -114,7 +114,10 @@ class GigManagement:
         }
 
     @staticmethod
-    def create_filter(gig: dict, match_attributes: list = ["venue", "performance_date", "music_starts", "price"]) -> dict:
+    def create_filter(
+        gig: dict,
+        match_attributes: list = ["venue", "performance_date", "music_starts", "price"],
+    ) -> dict:
         """Subsets a gig object to just the desired elements required to "upsert" on
 
         Args:
@@ -124,7 +127,7 @@ class GigManagement:
 
         Returns:
             dict: Subsetted gig object
-        """        
+        """
         return {x: v for x, v in gig.items() if x in match_attributes}
 
     def gig_prepper(self: object, gig: dict) -> dict:
