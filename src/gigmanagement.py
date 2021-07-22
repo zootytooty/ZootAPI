@@ -61,8 +61,10 @@ class GigManagement:
 
     def add_gigs(self: object, values: list) -> dict:
         """Method to insert one or many gigs into the database.
-        Performs an upsert, thus if an identical (all attributes match) gig is present,
-        it will be replaced in order to avoid duplicates
+        Performs an upsert, based on the following premise:
+            - Assume that if the date, venue, start time & price match then it's the same gig
+            - If they match then update the gig. Possibly for the title or description changed
+            - Hopefully this removes the presence of duplicates
 
         Args:
             self (object): GigManagement Class
@@ -75,7 +77,10 @@ class GigManagement:
                     - New records inserted
         """
         # Upsert new gigs into the DB
-        upserted_gigs = [self.conn.gigs.update(gig, gig, upsert=True) for gig in values]
+        upserted_gigs = [
+            self.conn.gigs.update(self.create_filter(gig), gig, upsert=True)
+            for gig in values
+        ]
 
         return self.extract_upsert_metadata(upserted_gigs)
 
@@ -107,6 +112,23 @@ class GigManagement:
             "records_updated": updated,
             "records_added": added,
         }
+
+    @staticmethod
+    def create_filter(
+        gig: dict,
+        match_attributes: list = ["venue", "performance_date", "music_starts", "price"],
+    ) -> dict:
+        """Subsets a gig object to just the desired elements required to "upsert" on
+
+        Args:
+            gig (dict): Standard gig object
+            match_attributes (list, optional): Fields to subset to.
+                Defaults to ["venue", "performance_date", "music_starts", "price"].
+
+        Returns:
+            dict: Subsetted gig object
+        """
+        return {x: v for x, v in gig.items() if x in match_attributes}
 
     def gig_prepper(self: object, gig: dict) -> dict:
         """Cleans up & standardises formatting of gigs prior to return
