@@ -65,7 +65,7 @@ class VenueManagement:
         projection = {"_id": 0}
         return [x for x in self.conn.venues.find(filters, projection)]
 
-    def add_venues(self: object, venue_details: dict) -> dict:
+    def add_venue(self: object, venue_details: dict) -> dict:
         """Method to insert one venue into the database.
 
         Performs a straight insert attempt
