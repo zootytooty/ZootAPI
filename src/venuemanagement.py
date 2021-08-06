@@ -1,10 +1,13 @@
 """Class to control CRUD venue handling functionality."""
 
+from typing import List
+
 import pymongo
 
 
 class VenueManagement:
     """To manage getting and adding gigs."""
+
     def __init__(
         self: object,
         username: str,
@@ -52,12 +55,41 @@ class VenueManagement:
         client = pymongo.MongoClient(connection_string)
         return client.get_database(database)
 
-    def get_venues(self: object):
+    def get_venues(self: object) -> List[dict]:
         """Sources venues & their details.
 
         Returns:
-            list: list of venues
+            List[dict]: list of venues
         """
         filters = {}
         projection = {"_id": 0}
         return [x for x in self.conn.venues.find(filters, projection)]
+
+    def add_venues(self: object, venue_details: dict) -> dict:
+        """Method to insert one venue into the database.
+
+        Performs a straight insert attempt
+
+        Args:
+            venue_details (list): The venue details to insert
+
+        Returns:
+            dict: Metadata regarding the insert attempt, containing:
+                    - Records attempted
+                    - Existing records updated
+                    - New records inserted
+        """
+        inserted_venue = self.conn.venues.update(
+            venue_details, venue_details, upsert=True
+        )
+
+        if inserted_venue["ok"] == 1:
+            response = {
+                "attempted": inserted_venue["n"],
+                "already_existed": inserted_venue["updatedExisting"],
+                "added": 1 if inserted_venue["updatedExisting"] is False else 0,
+            }
+        else:
+            response = {"attempted": 0, "already_existed": False, "added": 0}
+
+        return response
