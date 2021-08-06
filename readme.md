@@ -112,3 +112,53 @@ The response is a JSON containing the number of records attempted, updated and a
     "records_added": 1
 }
 ```
+
+### Get Venues
+
+`GET: venues`
+
+No search options currently supported, it simply returns all available venues.
+```http
+/venues
+```
+
+The response is a JSON array containing the all venues, eg:
+```JSON
+[
+    {
+        "name": "303",
+        "address": "303 High St, Northcote VIC 3070",
+        "url": "https://303.net.au",
+        "image_url": "https://scontent.fmel12-1.fna.fbcdn.net/v/t1.6435-9/120326041_3258664840837348_1752761260857739659_n.jpg?_nc_cat=104&ccb=1-4&_nc_sid=09cbfe&_nc_ohc=-pnqfV96YtYAX-HPha3&tn=15IMkiJDR1oObYeR&_nc_ht=scontent.fmel12-1.fna&oh=14cd416181c563b9ea4600ec4f633492&oe=6131BE46"
+    },
+    {
+        "name": "Bird's Basement",
+        "address": "11 Singers Ln, Melbourne VIC 3000",
+        "url": "https://birdsbasement.com/",
+        "image_url": "https://scontent.fmel12-1.fna.fbcdn.net/v/t1.18169-9/12193600_1660474057526040_1865837591702638753_n.jpg?_nc_cat=107&ccb=1-4&_nc_sid=09cbfe&_nc_ohc=f6RlLxkgFN0AX9HCtLh&_nc_ht=scontent.fmel12-1.fna&oh=ca322328ec45a857498ea35fc619e944&oe=61327BBA"
+    }
+]
+```
+
+### Add Venue
+
+`POST: venues`
+
+Inserts a single venue into the DB. The request must reflect:
+```json
+{
+    "name": "Venue name",
+    "address": "Venue address in the format of: 123 abc st, suburb VIC 3XXX",
+    "url": "url to homepage",
+    "image_url": "url to venue icon" 
+}
+```
+
+The response is a JSON indicating the number of records attempted, whether the venue already existed & if the venue was added, eg:
+```JSON
+{
+    "attempted": 1,
+    "already_existed": false,
+    "added": 1
+}
+```

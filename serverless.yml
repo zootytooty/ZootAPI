@@ -16,7 +16,7 @@ provider:
 functions:
   getgigs:
     module: src
-    handler: zootapi.get_gigs
+    handler: gigs_api.get_gigs
     include:
       - src/**
     events:
@@ -26,12 +26,32 @@ functions:
 
   addgigs:
     module: src
-    handler: zootapi.add_gigs
+    handler: gigs_api.add_gigs
     include:
       - src/**
     events:
       - http:
           path: gigs
+          method: post
+
+  getvenues:
+    module: src
+    handler: venues_api.get_venues
+    include:
+      - src/**
+    events:
+      - http:
+          path: venues
+          method: get
+
+  addvenues:
+    module: src
+    handler: venues_api.add_venue
+    include:
+      - src/**
+    events:
+      - http:
+          path: venues
           method: post
 
 
