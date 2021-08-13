@@ -35,7 +35,7 @@ All methods are within `gigmanagement.py`
 By default returns all shows; shows from the past and future. The API supports querystring filtering by any of the above listed data points, eg:
 ```http
 /gigs?venue=jazzlab
-/gigs?venue=paris_cat&date=YYYYMMDD
+/gigs?venue=paris_cat&performance_date=YYYY-MM-DD
 ```
 
 The response is a JSON array containing the shows requested, eg:
