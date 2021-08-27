@@ -37,6 +37,10 @@ provider:
   runtime: python3.8
   region: ap-southeast-2
   lambdaHashingVersion: 20201221
+  apiGateway:
+    apiKeys:
+      - name: test
+        value: this-is-a-test-key-for-testing
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -64,6 +68,7 @@ functions:
       - http:
           path: gigs/{id}
           method: get
+          private: true
           cors: true
           request:
             parameters:
@@ -76,6 +81,7 @@ functions:
       - http:
           path: gigs/
           method: get
+          private: true
           cors: true
           request:
             parameters:
